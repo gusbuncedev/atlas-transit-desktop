@@ -3,6 +3,7 @@ from datetime import datetime
 import requests
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QDialog, QMainWindow
+from PyQt6.QtCore import Qt
 
 from MainWindow import Ui_MainWindow
 from Dialog import Ui_Dialog
@@ -13,6 +14,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.url = "https://huxley2.azurewebsites.net"
         self.setupUi(self)
+        self.lineEdit.textChanged.connect(self.search)
         self.stationTable.setColumnWidth(0, 600)
         self.stationTable.setEditTriggers(
             QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers
@@ -41,6 +43,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 row, 0, QtWidgets.QTableWidgetItem(station["stationName"])
             )
             row += 1
+
+    def search(self, s):
+        items = self.stationTable.findItems(s, Qt.MatchFlag.MatchStartsWith)
+        if items:
+            item = items[0]
+            self.stationTable.setCurrentItem(item)
 
 
 class Dialog(QDialog):
@@ -101,6 +109,11 @@ class Dialog(QDialog):
                             row, 3, QtWidgets.QTableWidgetItem(str(len(coaches)))
                         )
 
+                r = requests.get(f"{self.url}/service/{service['serviceIdGuid']}")
+                platform = r.json()
+                self.ui.serviceTable.setItem(
+                    row, 5, QtWidgets.QTableWidgetItem(platform["platform"])
+                )
                 if service["destination"][0]["via"] is not None:
                     self.ui.serviceTable.setItem(
                         row,

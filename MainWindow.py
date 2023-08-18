@@ -17,6 +17,11 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.lineEdit = QtWidgets.QLineEdit(parent=self.centralwidget)
+        self.lineEdit.setInputMask("")
+        self.lineEdit.setText("")
+        self.lineEdit.setObjectName("lineEdit")
+        self.verticalLayout.addWidget(self.lineEdit)
         self.stationTable = QtWidgets.QTableWidget(parent=self.centralwidget)
         self.stationTable.setObjectName("stationTable")
         self.stationTable.setColumnCount(1)
@@ -46,6 +51,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.lineEdit.setPlaceholderText(_translate("MainWindow", "Search For A Station"))
         item = self.stationTable.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Station"))
         self.showDepartureBoard.setText(_translate("MainWindow", "Departure Board"))
