@@ -16,7 +16,17 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QListWidget" name="stationList"/>
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Search For A Station</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QTableWidget" name="stationTable">
@@ -25,17 +35,18 @@
         <string>Station</string>
        </property>
       </column>
-      <column>
-       <property name="text">
-        <string>CRS Code</string>
-       </property>
-      </column>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="fetchButton">
+     <widget class="QPushButton" name="showDepartureBoard">
+      <property name="font">
+       <font>
+        <family>Hasklig</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>Get Departures</string>
+       <string>Departure Board</string>
       </property>
      </widget>
     </item>
