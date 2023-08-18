@@ -13,8 +13,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.url = "https://huxley2.azurewebsites.net"
         self.setupUi(self)
-        self.stationTable.setColumnWidth(0, 400)
-        self.stationTable.setColumnWidth(1, 200)
+        self.stationTable.setColumnWidth(0, 600)
         self.stationTable.setEditTriggers(
             QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers
         )
@@ -22,24 +21,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QtWidgets.QHeaderView.ResizeMode.Fixed
         )
         self.load_data()
-        self.fetchButton.clicked.connect(self.fetch_data)
-        self.load_list_data()
-
-    def load_list_data(self):
-        r = requests.get(f"{self.url}/crs")
-
-        stations = r.json()
-
-        stationlist = []
-
-        for station in stations:
-            stationlist.append(station["stationName"])
-
-        self.stationList.addItems(stationlist)
-        self.stationTable.currentItem()
+        self.showDepartureBoard.clicked.connect(self.fetch_data)
 
     def fetch_data(self):
-        dlg = Dialog(self)
+        dlg = Dialog(self, self.stationTable.currentItem().text())
         dlg.exec()
 
     def load_data(self):
@@ -55,17 +40,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.stationTable.setItem(
                 row, 0, QtWidgets.QTableWidgetItem(station["stationName"])
             )
-            self.stationTable.setItem(
-                row, 1, QtWidgets.QTableWidgetItem(station["crsCode"])
-            )
             row += 1
 
 
 class Dialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent, station):
         super().__init__(parent)
         self.url = "https://huxley2.azurewebsites.net"
-        requestdepartures = requests.get(f"{self.url}/departures/eus")
+        self.station = "EUS"
+        requestdepartures = requests.get(f"{self.url}/departures/{station}")
         departures = requestdepartures.json()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
